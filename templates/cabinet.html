@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.2/socket.io.js'></script>
+    <script src="https://kit.fontawesome.com/59ae1b95e6.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <img id = "img" width = 160 height = 160>
+     <script>
+        imgchunks = [];
+        $(document).ready(function(){
+            socketio = io.connect('http://172.20.10.8:5000'); 
+            socketio.on('ESP32_pics', function(RxData) { 
+                console.log("gay");
+                console.log(btoa(RxData));
+                var img = document.getElementById("img");   
+                
+                img.setAttribute('src' , 'data:image/jpg;base64,' + RxData);
+            });
+        });
+    </script>
+
+</body>
+</html>

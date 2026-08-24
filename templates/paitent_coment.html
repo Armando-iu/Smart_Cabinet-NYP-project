@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Advice</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section h2 {
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        .submit-section {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Doctor's Advice</h1>
+        <form id="advice-form" method="post" action="/submit_advice">
+            <div class="section">
+                <h2>Cardiovascular Health</h2>
+                <textarea name="cardiovascular" rows="4" maxlength="100" placeholder="Advice on managing blood pressure, cholesterol levels, and heart disease risk..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Diabetes and Glucose Management</h2>
+                <textarea name="glucose" rows="4" maxlength="100" placeholder="Guidance on monitoring blood sugar levels..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Nutrition and Diet</h2>
+                <textarea name="diet" rows="4" maxlength="100" placeholder="Advice on balanced diets, portion control, and nutritional supplements..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Physical Fitness and Exercise</h2>
+                <textarea name="excercise" rows="4" maxlength="100" placeholder="Exercise routines and physical activity guidelines..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Mental Health</h2>
+                <textarea name="mental" rows="4" maxlength="100" placeholder="Strategies for managing stress, anxiety, and depression..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Respiratory Health</h2>
+                <textarea name="respiratory" rows="4" maxlength="100" placeholder="Advice on managing asthma, COPD, and other respiratory conditions..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Digestive Health</h2>
+                <textarea name="digestive" rows="4" maxlength="100" placeholder="Guidance on managing conditions like IBS, acid reflux, and constipation..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Bone and Joint Health</h2>
+                <textarea name="bone" rows="4" maxlength="100" placeholder="Advice on preventing and managing osteoporosis and arthritis..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Skin Health</h2>
+                <textarea name="skin" rows="4" maxlength="100" placeholder="Tips for skincare routines and preventing common skin conditions..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Reproductive and Sexual Health</h2>
+                <textarea name="sexual" rows="4" maxlength="100" placeholder="Guidance on contraception, family planning, and sexual health..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Immunizations and Preventive Care</h2>
+                <textarea name="immunizations" rows="4" maxlength="100" placeholder="Recommendations for vaccines and regular health screenings..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Aging and Elderly Care</h2>
+                <textarea name="aging" rows="4" maxlength="100" placeholder="Tips for healthy aging and managing age-related conditions..."></textarea>
+            </div>
+            <div class="section">
+                <h2>Pediatric Health</h2>
+                <textarea name="pediatric" rows="4" maxlength="100" placeholder="Guidance on child nutrition, growth, and development..."></textarea>
+            </div>
+            <div class="submit-section">
+                <button type="button" class="back-button" onclick="goBack()">Back</button>
+                <button type="submit">Submit Advice</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function goBack() {
+            window.location.href = '/paitent_report';
+        }
+
+        const form = document.getElementById('advice-form');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            try {
+                const formData = new FormData(form);
+
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to submit the form.');
+                }
+
+                // Redirect to the main page after successful submission
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

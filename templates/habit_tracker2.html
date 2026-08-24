@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Data Graphs</title>
+    <link rel="stylesheet" href="health_monitoring.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+        .toggle-switch {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 34px;
+            background-color: #ccc;
+            border-radius: 50px;
+            transition: background-color 0.4s;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(46px);
+        }
+        #graphContainer svg {
+            display: none; /* Initially hide all SVGs */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            width: 600px;
+            height: 300px;
+        }
+        .toggle{
+            padding-top: 40px;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #DFF8E8; /* Light green background */
+        }
+    
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em;
+            background-color: #a47171;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1em;
+        }
+        .navbar h1 {
+                color: white;
+                flex-grow: 1;
+                text-align: center;
+                margin: 0;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .row {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+    
+        .item {
+            margin: 20px;
+            text-align: center;
+        }
+    
+        .icon {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 5px;
+            position: relative;
+        }
+    
+        .title {
+            position: absolute;
+            top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    
+        .iron .icon {
+            background-color: #FF6347; /* Tomato red */
+        }
+    
+        .calcium .icon {
+            background-color: #87CEFA; /* Sky blue */
+        }
+    
+        .vitamin .icon {
+            background-color: #FFD700; /* Gold */
+        }
+    
+        .toggle {
+            text-align: center;
+            margin-top: 20px;
+        }
+    
+        .toggle input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .toggle input[type="checkbox"]:checked {
+            background-color: #4CAF50;
+        }
+    
+        .toggle input[type="checkbox"]:before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: white;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s;
+        }
+    
+        .toggle input[type="checkbox"]:checked:before {
+            left: 21px;
+        }
+        .circle-container {
+            position: relative;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            margin: 20px;  /* Center the container if needed */
+        }
+    
+        .circle-container img {
+            display: block;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+    
+        .progress-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div onclick="main_page()">&#x3C;</div>
+        <h1>Health Monitoring</h1>
+    </div>
+    <div class="container">
+        <h2>Health-report Dashboard</h2>
+        <div id="graphContainer">
+            <svg id="ironGraph"></svg>
+            <svg id="calciumGraph"></svg>
+            <svg id="vitaminGraph"></svg>
+        </div>
+        <div class="controls">
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="iron" checked>
+                <span class="slider"></span>
+                <h4>Iron</h4>
+            </label>
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="calcium">
+                <span class="slider"></span>
+                <h4>Calcium</h4>
+            </label>
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="vitamin">
+                <span class="slider"></span>
+                <h4>Vitamin</h4>
+            </label>
+        </div>
+        <p></p>
+        <div class="toggle">
+            <label for="show-more">Show More:</label>
+            <input type="checkbox" id="show-more" onchange="handleToggleChange(this)">
+        </div>
+    
+
+    <script>
+        window.onload = function() {
+            var checkbox = document.getElementById('show-more');
+            checkbox.checked = true;
+        }
+        function handleToggleChange(toggle) {
+            if (toggle.checked) {
+
+            }
+            else {
+                window.location.href = '/habit_tracker';
+            }
+        }
+        function main_page() {
+            window.location.href = '/habit_tracker';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setupControls();
+            drawGraphs();
+            toggleGraph('iron'); // Ensure 'iron' matches the ID and is the default displayed graph
+        });
+
+        function setupControls() {
+            document.querySelectorAll('.controls input').forEach(input => {
+                input.addEventListener('change', function() {
+                    toggleGraph(this.value); // 'this.value' should exactly match the ID segment
+                });
+            });
+        }
+
+
+        function toggleGraph(selectedGraph) {
+            document.querySelectorAll('#graphContainer svg').forEach(svg => {
+                svg.style.display = 'none'; // Hide all graphs
+            });
+            const svg = document.getElementById(`${selectedGraph}Graph`); // Ensure ID matches
+            svg.style.display = 'block'; // Show the selected graph
+        }
+
+        function drawGraphs() {
+            drawGraph('ironGraph', [36.5, 36.8, 37.1, 37.0, 36.7, 36.9, 36.6], 'red', "°C");
+            drawGraph('calciumGraph', [120, 122, 125, 123, 121, 124, 122], 'blue', "mmHg");
+            drawGraph('vitaminGraph', [98, 97, 96, 97, 95, 97, 98], 'green', "%");
+        }
+
+        function drawGraph(svgId, data, strokeColor, unit) {
+            const svg = document.getElementById(svgId);
+            svg.innerHTML = ''; // Clear previous contents
+            let maxY = Math.max(...data);
+            let minY = Math.min(...data);
+            let rangeY = maxY - minY;
+            maxY += rangeY * 0.1; // Adding 10% padding above max
+            minY -= rangeY * 0.1; // Adding 10% padding below min
+
+            let pathString = "";
+            data.forEach((value, index) => {
+                const x = 50 + index * 75;
+                const y = 250 - ((value - minY) / (maxY - minY) * 200); // Dynamic Y positioning
+                if (index === 0) pathString = `M ${x} ${y} `;
+                else pathString += `L ${x} ${y} `;
+            });
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathString);
+            path.setAttribute("stroke", strokeColor);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", 2);
+            svg.appendChild(path);
+            drawAxes(svg, data, unit, minY, maxY);
+        }
+
+        function drawAxes(svg, data, unit, minY, maxY) {
+            const yAxisIncrement = (maxY - minY) / 5;
+            // Clear existing axes
+            svg.querySelectorAll('.axis, .axis-label').forEach(el => el.remove());
+            // X-axis
+            const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xAxis.setAttribute("x1", "30");
+            xAxis.setAttribute("y1", "250");
+            xAxis.setAttribute("x2", "570");
+            xAxis.setAttribute("y2", "250");
+            xAxis.setAttribute("stroke", "black");
+            xAxis.classList.add('axis');
+            svg.appendChild(xAxis);
+            // Y-axis
+            const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            yAxis.setAttribute("x1", "50");
+            yAxis.setAttribute("y1", "20");
+            yAxis.setAttribute("x2", "50");
+            yAxis.setAttribute("y2", "250");
+            yAxis.setAttribute("stroke", "black");
+            yAxis.classList.add('axis');
+            svg.appendChild(yAxis);
+            // Y-axis labels
+            for (let i = 0; i <= 5; i++) {
+                const y = 250 - (i * 50);
+                const value = minY + (i * yAxisIncrement);
+                const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                label.setAttribute("x", 30);
+                label.setAttribute("y", y + 5);
+                label.setAttribute("fill", "black");
+                label.setAttribute("font-size", "12");
+                label.setAttribute("text-anchor", "end");
+                label.textContent = value.toFixed(1);
+                label.classList.add('axis-label');
+                svg.appendChild(label);
+            }
+            // X-axis labels (dates)
+            const dates = getDates();
+            dates.forEach((date, i) => {
+                const x = 50 + i * 75;
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", 270);
+                text.setAttribute("fill", "black");
+                text.setAttribute("font-size", "12");
+                text.setAttribute("text-anchor", "middle");
+                text.textContent = date;
+                svg.appendChild(text);
+            });
+        }
+
+        function getDates() {
+            const dates = [];
+            for (let i = 7; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                dates.push(`${d.getDate()}/${d.getMonth()+1}`);
+            }
+            return dates;
+        }
+
+    </script>
+</body>
+</html>

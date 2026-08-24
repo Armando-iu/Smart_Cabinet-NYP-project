@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+</head>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        flex-direction: column; /* Stack children vertically */
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+    }
+
+    header {
+        width: 100%;
+        text-align: center;
+        padding: 20px 0;
+        color: #333;
+        font-size: 24px;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 90%;
+        max-width: 500px;
+    }
+
+    .grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .grid-item img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+    }
+
+    .grid-item p {
+        font-size: 16px;
+        color: #666;
+    }
+
+    .grid-item:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Specific color styles per button */
+    #habit {
+        background-color: #A4C8F0; /* Light blue */
+    }
+    #report {
+        background-color: #F4A7B9; /* Light pink */
+    }
+    #cabinet {
+        background-color: #99D19C; /* Light green */
+    }
+    #monitoring {
+        background-color: #FFDEAD; /* Light peach */
+    }
+
+    @media screen and (max-width: 600px) {
+        .grid-container {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        body {
+            justify-content: flex-start; /* Prevent header from centering vertically on small screens */
+        }
+    }
+
+</style>
+<body>
+    <header>
+        <h1>Welcome back Mr____</h1>
+    </header>
+    <div class="grid-container">
+        <a href="habit_tracker.html" class="grid-item" id="habit">
+            <img src="habit-icon.png" alt="Habit Tracker">
+            <p>Habit Tracker</p>
+        </a>
+        <a href="Health Report.html" class="grid-item" id="report">
+            <img src="report-icon.png" alt="Health Report">
+            <p>Health Report</p>
+        </a>
+        <a href="cabinet.html" class="grid-item" id="cabinet">
+            <img src="cabinet-icon.png" alt="Cabinet">
+            <p>Cabinet</p>
+        </a>
+        <a href="health_monitoring.html" class="grid-item" id="monitoring">
+            <img src="monitor-icon.png" alt="Health Monitoring">
+            <p>Health Monitoring</p>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Data Graphs</title>
+    <link rel="stylesheet" href="health_monitoring.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e6acac; /* Updated background color */
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+        }
+        .toggle-switch {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 34px;
+            background-color: #ccc;
+            border-radius: 50px;
+            transition: background-color 0.4s;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(46px);
+        }
+        #graphContainer svg {
+            display: none; /* Initially hide all SVGs */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            width: 600px;
+            height: 300px;
+        }
+        .toggle{
+            padding-top: 40px;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1em;
+            background-color: #a47171;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 1em;
+        }
+        .navbar h1 {
+                color: white;
+                flex-grow: 1;
+                text-align: center;
+                margin: 0;
+        }
+
+        .container {
+            position: relative;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navigation {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            font-size: 24px;
+            cursor: pointer;
+            transform: translateY(-50%);
+        }
+
+        .navigation.left {
+            left: 10px;
+        }
+
+        .navigation.right {
+            right: 10px;
+        }
+
+        h2 {
+            color: #000;
+            margin: 20px 0;
+        }
+
+        .thermometer {
+            margin: 20px auto;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+        }
+
+        .thermometer img {
+            width: 100%;
+            height: auto;
+        }
+
+        .temperature {
+            font-size: 32px;
+            color: #000;
+            margin: 10px 0;
+        }
+
+        .description {
+            color: #666;
+            margin: 20px;
+            font-size: 16px;
+        }
+
+        .toggle {
+            margin: 20px;
+        }
+
+        .toggle input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 60px;
+            height: 30px;
+            background-color: #ccc;
+            border-radius: 30px;
+            position: relative;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle input[type="checkbox"]:checked {
+            background-color: #4CAF50;
+        }
+
+        .toggle input[type="checkbox"]:before {
+            content: '';
+            position:absolute;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: white;
+            top: 1px;
+            left: 1px;
+            transition: left 0.3s;
+        }
+
+        .toggle input[type="checkbox"]:checked:before {
+            left: 31px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .dot.active {
+            background-color: #333;
+        }
+
+        .circle-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-container img {
+            z-index: 1;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div onclick="main_page()">&#x3C;</div>
+        <h1>Health Monitoring</h1>
+    </div>
+    <div class="container">
+        <h2>Health-report Dashboard</h2>
+        <div id="graphContainer">
+            <svg id="temperatureGraph"></svg>
+            <svg id="pressureGraph"></svg>
+            <svg id="oxygenGraph"></svg>
+            <svg id="heartRateGraph"></svg>
+        </div>
+        <div class="controls">
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="temperature" checked>
+                <span class="slider"></span>
+                <h4>Temperature</h4>
+            </label>
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="pressure">
+                <span class="slider"></span>
+                <h4>Blood Pressure</h4>
+            </label>
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="oxygen">
+                <span class="slider"></span>
+                <h4>Blood oxygen</h4>
+            </label>
+            <label class="toggle-switch">
+                <input type="radio" name="graphToggle" value="heartRate">
+                <span class="slider"></span>
+                <h4>Heart Rate</h4>
+            </label>
+        </div>
+        <p></p>
+        <div class="toggle">
+            <label for="show-more">Show More:</label>
+            <input type="checkbox" id="show-more" onchange="handleToggleChange(this)">
+        </div>
+    
+
+    <script>
+        window.onload = function() {
+            var checkbox = document.getElementById('show-more');
+            checkbox.checked = true;
+        }
+        function handleToggleChange(toggle) {
+            if (toggle.checked) {
+
+            }
+            else {
+                window.location.href = '/health_monitoring';
+            }
+        }
+        function main_page() {
+            window.location.href = '/health_monitoring';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setupControls();
+            drawGraphs();
+            toggleGraph('temperature'); // Show the temperature graph by default
+        });
+
+        function setupControls() {
+            document.querySelectorAll('.controls input').forEach(input => {
+                input.addEventListener('change', function() {
+                    toggleGraph(this.value);
+                });
+            });
+        }
+
+        function toggleGraph(selectedGraph) {
+            document.querySelectorAll('#graphContainer svg').forEach(svg => {
+                svg.style.display = 'none'; // Hide all graphs
+            });
+            const svg = document.getElementById(`${selectedGraph}Graph`);
+            svg.style.display = 'block'; // Show the selected graph
+            drawAxes(svg, selectedGraph);
+        }
+
+        function drawGraphs() {
+            drawGraph('temperatureGraph', [36.5, 36.8, 37.1, 37.0, 36.7, 36.9, 36.6], 'red', "°C");
+            drawGraph('pressureGraph', [120, 122, 125, 123, 121, 124, 122], 'blue', "mmHg");
+            drawGraph('oxygenGraph', [98, 97, 96, 97, 95, 97, 98], 'green', "%");
+            drawGraph('heartRateGraph', [72, 75, 73, 74, 76, 78, 77], 'purple', "bpm");
+        }
+
+        function drawGraph(svgId, data, strokeColor, unit) {
+            const svg = document.getElementById(svgId);
+            svg.innerHTML = ''; // Clear previous contents
+            let maxY = Math.max(...data);
+            let minY = Math.min(...data);
+            let rangeY = maxY - minY;
+            maxY += rangeY * 0.1; // Adding 10% padding above max
+            minY -= rangeY * 0.1; // Adding 10% padding below min
+
+            let pathString = "";
+            data.forEach((value, index) => {
+                const x = 50 + index * 75;
+                const y = 250 - ((value - minY) / (maxY - minY) * 200); // Dynamic Y positioning
+                if (index === 0) pathString = `M ${x} ${y} `;
+                else pathString += `L ${x} ${y} `;
+            });
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathString);
+            path.setAttribute("stroke", strokeColor);
+            path.setAttribute("fill", "none");
+            path.setAttribute("stroke-width", 2);
+            svg.appendChild(path);
+            drawAxes(svg, data, unit, minY, maxY);
+        }
+
+        function drawAxes(svg, data, unit, minY, maxY) {
+            const yAxisIncrement = (maxY - minY) / 5;
+            // Clear existing axes
+            svg.querySelectorAll('.axis, .axis-label').forEach(el => el.remove());
+            // X-axis
+            const xAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            xAxis.setAttribute("x1", "30");
+            xAxis.setAttribute("y1", "250");
+            xAxis.setAttribute("x2", "570");
+            xAxis.setAttribute("y2", "250");
+            xAxis.setAttribute("stroke", "black");
+            xAxis.classList.add('axis');
+            svg.appendChild(xAxis);
+            // Y-axis
+            const yAxis = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            yAxis.setAttribute("x1", "50");
+            yAxis.setAttribute("y1", "20");
+            yAxis.setAttribute("x2", "50");
+            yAxis.setAttribute("y2", "250");
+            yAxis.setAttribute("stroke", "black");
+            yAxis.classList.add('axis');
+            svg.appendChild(yAxis);
+            // Y-axis labels
+            for (let i = 0; i <= 5; i++) {
+                const y = 250 - (i * 50);
+                const value = minY + (i * yAxisIncrement);
+                const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                label.setAttribute("x", 30);
+                label.setAttribute("y", y + 5);
+                label.setAttribute("fill", "black");
+                label.setAttribute("font-size", "12");
+                label.setAttribute("text-anchor", "end");
+                label.textContent = value.toFixed(1);
+                label.classList.add('axis-label');
+                svg.appendChild(label);
+            }
+            // X-axis labels (dates)
+            const dates = getDates();
+            dates.forEach((date, i) => {
+                const x = 50 + i * 75;
+                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", 270);
+                text.setAttribute("fill", "black");
+                text.setAttribute("font-size", "12");
+                text.setAttribute("text-anchor", "middle");
+                text.textContent = date;
+                svg.appendChild(text);
+            });
+        }
+
+        function getDates() {
+            const dates = [];
+            for (let i = 7; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                dates.push(`${d.getDate()}/${d.getMonth()+1}`);
+            }
+            return dates;
+        }
+
+    </script>
+</body>
+</html>

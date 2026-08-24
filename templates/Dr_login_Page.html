@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/coacheslogin.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    header {
+        background-color: #007bff;
+        color: white;
+        width: 100%;
+        padding: 1em;
+        text-align: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #logo {
+        font-size: 24px;
+    }
+
+    .content-box {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .content {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+        padding: 2em;
+        width: 400px;
+    }
+
+    h3 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 1.5em;
+    }
+
+    .sections {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5em;
+    }
+
+    .sections a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .sections a:hover {
+        color: #0056b3;
+    }
+
+    .input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .input p {
+        margin-bottom: 0.5em;
+        font-weight: bold;
+    }
+
+    .input input {
+        width: 100%;
+        padding: 0.8em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+
+    .input input:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .prompt {
+        font-size: 0.9em;
+        color: #007bff;
+        text-align: right;
+        margin-top: 0.5em;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+
+    .prompt:hover {
+        color: #0056b3;
+    }
+
+    .form-button {
+        margin-top: 1.5em;
+    }
+
+    .form-button button {
+        width: 100%;
+        padding: 0.8em;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-button button:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+<body>
+    <header>
+        <h2 id="logo">IOT SYSTEM Project</h2>
+    </header>
+
+    <div class="content-box">
+        <div class="content">
+            <h3>Welcome to Health Plus</h3>
+            <div class="sections">
+                <a href="/">Users</a>
+                <a href="/Dr_login_Page">Doctors</a>
+            </div>
+            <div class="input-container">
+                <div class="input">
+                    <p>Dr_ID</p>
+                    <input type="text" id="dr_id" placeholder="Dr_ID">
+                    <p>Dr_name</p>
+                    <input type="text" id="dr_name" placeholder="Dr_name">
+                    <p>Dr_IC</p>
+                    <input type="text" id="dr_ic" placeholder="Dr_IC">
+                    <p>TwoFA</p>
+                    <input type="text" id="two_fa" placeholder="TwoFA">
+                </div>
+                <a href="#"><p class="prompt">Forgot password?</p></a>
+                <div class="form-button">
+                    <button onclick="login()">Sign in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function login() {
+            const dr_id = document.getElementById('dr_id').value;
+            const dr_name = document.getElementById('dr_name').value;
+            const dr_ic = document.getElementById('dr_ic').value;
+            const two_fa = document.getElementById('two_fa').value;
+
+            const response = await fetch('/login_dr', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dr_id, dr_name, dr_ic, two_fa })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/paitent_report';
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

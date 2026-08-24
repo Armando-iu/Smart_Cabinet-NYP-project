@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Plus</title>
+    <link rel="stylesheet" href="css/coacheslogin.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 1em 0;
+        text-align: center;
+    }
+
+    #logo {
+        font-size: 1.5em;
+    }
+
+    .content-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 64px);
+    }
+
+    .content {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 2em;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 1.5em;
+    }
+
+    .sections {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1.5em;
+    }
+
+    .sections a {
+        text-decoration: none;
+        color: #4CAF50;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .sections a:hover {
+        color: #388E3C;
+    }
+
+    .input-container {
+        display: grid;
+        grid-gap: 1em;
+    }
+
+    .input p {
+        margin-bottom: 0.5em;
+    }
+
+    .input input {
+        width: 100%;
+        padding: 0.75em;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+    }
+
+    .prompt {
+        font-size: 0.9em;
+        color: #707070;
+        text-align: right;
+        text-decoration: underline;
+        margin-top: 0.5em;
+        cursor: pointer;
+    }
+
+    .form-button {
+        margin-top: 2em;
+    }
+
+    .form-button button {
+        width: 100%;
+        padding: 0.75em;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-button button:hover {
+        background-color: #388E3C;
+    }
+</style>
+<body>
+    <header>
+        <h2 id="logo">IOT SYSTEM Project</h2>
+    </header>
+
+    <div class="content-box">
+        <div class="content">
+            <h3>Welcome to Health Plus</h3>
+            <div class="sections">
+                <a href="/">Users</a>
+                <a href="/Dr">Doctors</a>
+            </div>
+            <div class="input-container">
+                <div class="input">
+                    <p>Email</p>
+                    <input type="text" id="email" placeholder="Email">
+                    <p>User Name</p>
+                    <input type="text" id="username" placeholder="Username">
+                    <p>Password</p>
+                    <input type="password" id="password" placeholder="Password">
+                </div>
+                <a href="#"><p class="prompt">Forgot password?</p></a>
+                <div class="form-button">
+                    <button onclick="signIn()">Sign in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function signIn() {
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, username, password })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = '/main_page';
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

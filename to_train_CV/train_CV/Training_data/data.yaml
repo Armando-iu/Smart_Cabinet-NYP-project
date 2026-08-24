@@ -1,0 +1,13 @@
+train: /content/gdrive/MyDrive/Colab Notebooks/Data/Iot Sys food/Food Pics/Smart shopping cart.v1i.yolov9/train
+val: /content/gdrive/MyDrive/Colab Notebooks/Data/Iot Sys food/Food Pics/Smart shopping cart.v1i.yolov9/valid
+test: /content/gdrive/MyDrive/Colab Notebooks/Data/Iot Sys food/Food Pics/Smart shopping cart.v1i.yolov9/test
+
+nc: 3
+names: ['Nutella', 'Pepsi', 'Pringles']
+
+roboflow:
+  workspace: kiwisme
+  project: smart-shopping-cart-21yjc
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/kiwisme/smart-shopping-cart-21yjc/dataset/1

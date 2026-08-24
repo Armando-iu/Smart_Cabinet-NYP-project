@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Monitoring</title>
+</head>
+<link rel="stylesheet" href="health_monitoring.css">
+<body>
+    <div class="navbar">
+        <div onclick="main_page()">&#x3C;</div>
+        <h1>Health Monitoring</h1>
+    </div>
+    <div class="container">
+        <h2>Heart Rate</h2>
+        <div class="navigation left" onclick="previousPage()">&#x3C;</div>
+        <div class="circle-container">
+            <svg width="200" height="200" class="progress-ring">
+                <circle class="progress-ring__circle" stroke="green" stroke-width="4" fill="transparent" r="86" cx="100" cy="100"/>
+            </svg>
+            <img src="/website & server/Images/thermometer.jpg" alt="" width="160" height="160">
+        </div>
+        <div class="navigation right" onclick="nextPage()">&#x3E;</div>
+        <p class="temperature">90 Bpm</p>
+        <p class="description">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+        
+        <div class="toggle">
+            <label for="show-more">Show More:</label>
+            <input type="checkbox" id="show-more" onchange="handleToggleChange(this)">
+        </div>
+
+        <div class="pagination">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot active"></span>            
+            
+        </div>
+    </div>
+    <script>
+        function handleToggleChange(toggle) {
+            if (toggle.checked) {
+                window.location.href = 'health_monitoring SM.html'; // Redirect to another page when the toggle is checked
+            }
+        }
+        function main_page() {
+            window.location.href = 'main_page.html';
+        }
+        function previousPage() {
+            // Add logic or URL for the previous page
+            window.location.href = 'health_monitoring O2.html';
+        }
+        function nextPage() {
+            // Add logic or URL for the next page
+            window.location.href = 'health_monitoring.html';
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            updateProgress(37.5); // Example temperature
+        });
+        function updateProgress(value) {
+            const circle = document.querySelector('.progress-ring__circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+
+            // Normalize the value within the provided range
+            const normalizedValue = (value - 25) / (40 - 25);
+
+            // Calculate the stroke offset
+            const offset = circumference - normalizedValue * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            // Update color based on the normalized value: from green to red
+            const red = Math.floor(normalizedValue * 255);
+            const green = 255 - red;
+            circle.style.stroke = `rgb(${red},${green},0)`;
+        }
+    </script>
+</body>
+</html>

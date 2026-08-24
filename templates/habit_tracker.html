@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="habit_tracker.css">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #DFF8E8; /* Light green background */
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+        background-color: #a47171;
+        color: white;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 1em;
+    }
+    .navbar h1 {
+            color: white;
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+    }
+
+    .container {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .item {
+        margin: 20px;
+        text-align: center;
+    }
+
+    .icon {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        margin-bottom: 5px;
+        position: relative;
+    }
+
+    .title {
+        position: absolute;
+        top: 10px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .iron .icon {
+        background-color: #FF6347; /* Tomato red */
+    }
+
+    .calcium .icon {
+        background-color: #87CEFA; /* Sky blue */
+    }
+
+    .vitamin .icon {
+        background-color: #FFD700; /* Gold */
+    }
+
+    .toggle {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .toggle input[type="checkbox"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 40px;
+        height: 20px;
+        background-color: #ccc;
+        border-radius: 20px;
+        position: relative;
+        outline: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .toggle input[type="checkbox"]:checked {
+        background-color: #4CAF50;
+    }
+
+    .toggle input[type="checkbox"]:before {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background-color: white;
+        top: 1px;
+        left: 1px;
+        transition: left 0.3s;
+    }
+
+    .toggle input[type="checkbox"]:checked:before {
+        left: 21px;
+    }
+    .circle-container {
+        position: relative;
+        display: inline-block;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;  /* Center the container if needed */
+    }
+
+    .circle-container img {
+        display: block;
+        margin: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .progress-ring {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: rotate(-90deg);
+    }
+
+</style>
+<body>
+    <div class="navbar">
+        <div onclick="main_page()">&#x3C;</div>
+        
+        <h1>Habit Tracker</h1>
+    </div>
+    <div class="container">
+        <h4>Iron</h4>
+        <div class="item iron">
+            <div class="circle-container">
+                <svg width="200" height="200" class="progress-ring" data-value="5" data-min="0" data-max="20">
+                    <circle class="progress-ring__circle" stroke="green" stroke-width="4" fill="transparent" r="86" cx="100" cy="100"/>
+                </svg>
+                <img src="/website & server/Images/calcium-icon.jpg" alt="" width="160" height="160">
+            </div>
+        </div>
+        <p>9 mg</p>
+        <div class="row">
+            
+            <div class="item calcium">
+                <p>Calcium</p>
+                <div class="circle-container">
+                    <svg width="200" height="200" class="progress-ring" data-value="15" data-min="0" data-max="20">
+                        <circle class="progress-ring__circle" stroke="green" stroke-width="4" fill="transparent" r="86" cx="100" cy="100"/>
+                    </svg>
+                    <img src="/website & server/Images/calcium-icon.jpg" alt="" width="160" height="160">
+                </div>
+                <p>1000 mg</p>
+            </div>
+            
+            
+            <div class="item vitamin">
+                <p>Vitamin B12</p>
+                <div class="circle-container">
+                    <svg width="200" height="200" class="progress-ring" data-value="10" data-min="0" data-max="20">
+                        <circle class="progress-ring__circle" stroke="green" stroke-width="4" fill="transparent" r="86" cx="100" cy="100"/>
+                    </svg>
+                    <img src="/website & server/Images/calcium-icon.jpg" alt="" width="160" height="160">
+                </div>
+                <p>2.4 mcg</p>
+            </div>
+            
+        </div>
+        <div class="toggle">
+            <label for="show-more">Show More:</label>
+            <input type="checkbox" id="show-more" onchange="handleToggleChange(this)">
+        </div>
+    </div>
+    <script>
+        function main_page() {
+            window.location.href = '/main_page';
+        }
+
+        function handleToggleChange(toggle) {
+            if (toggle.checked) {
+                window.location.href = '/habit_tracker2'; // Redirect to another page when the toggle is checked
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const progressElements = document.querySelectorAll('.progress-ring');
+            progressElements.forEach(element => {
+                const value = parseInt(element.dataset.value);
+                const min = parseInt(element.dataset.min);
+                const max = parseInt(element.dataset.max);
+                updateProgress(element, value, min, max);
+            });
+        });
+
+        function updateProgress(svgElement, value, min, max) {
+            const circle = svgElement.querySelector('.progress-ring__circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = radius * 2 * Math.PI;
+
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = circumference;
+
+            const normalizedValue = (value - min) / (max - min);
+            const offset = circumference - normalizedValue * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            const red = Math.floor(normalizedValue * 255);
+            const green = 255 - red;
+            circle.style.stroke = `rgb(${red},${green},0)`;
+        }
+    </script>
+</body>
+</html>
